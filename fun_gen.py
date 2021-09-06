@@ -3,10 +3,10 @@ import numpy as np
 from matplotlib import pyplot as plt
 
 
-def lin_fun_gen(n_dots: int, x_scale: tuple, k: int, y0: int, std: int):
+def lin_fun_gen(n_dots: int, x_scale: tuple, k: int, b: int, std: int):
     rng = np.random.RandomState(1)
     x = x_scale[0] +(x_scale[1]-x_scale[0]) * rng.rand(n_dots)
-    y = k * x + y0 + std*rng.randn(n_dots)
+    y = k * x + b + std*rng.randn(n_dots)
     return x, y
 
 
@@ -21,16 +21,24 @@ def approx(x, y):
     return k, b
 
 
-def draw(x, y, name):
+def draw(x, y, name, inf):
     fig = plt.figure()
     axe = fig.add_subplot()
-    axe.scatter(x,y)
+    axe.scatter(x, y, c='g', label='k={} b={} n={} scale={}, std={}'.format(inf['k'],
+                                                                            inf['b'],
+                                                                            inf['n_dots'],
+                                                                            inf['x_scale'],
+                                                                            inf['std']))
     k, b = approx(x, y)
     y_approx = k*x + b
-    axe.plot(x, y_approx)
+    axe.plot(x, y_approx, c='r', label='k={:2.1f} b={:2.1f}'.format(k, b))
+    axe.legend()
+    plt.show()
+    print(inf)
     plt.savefig('image/{}.png'.format(name))
 
 
 if __name__ == '__main__':
-    x, y = lin_fun_gen(n_dots=50, x_scale=(-10, 10), k=2, y0=5, std=3)
-    draw(x, y, 'first')
+    inf = {'n_dots': 50, 'x_scale': (-10, 10), 'k': 2, 'b': 5, 'std': 3}
+    x, y = lin_fun_gen(**inf)
+    draw(x, y, 'first', inf)
