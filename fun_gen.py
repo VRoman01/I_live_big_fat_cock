@@ -33,8 +33,6 @@ def draw(x, y, name, inf):
     y_approx = k*x + b
     axe.plot(x, y_approx, c='r', label='k={:2.1f} b={:2.1f}'.format(k, b))
     axe.legend()
-    plt.show()
-    print(inf)
     plt.savefig('image/{}.png'.format(name))
 
 
