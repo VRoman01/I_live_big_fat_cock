@@ -3,10 +3,10 @@ import numpy as np
 from matplotlib import pyplot as plt
 
 
-def lin_fun_gen(n_dots: int, x_scale: int, k: int, y0: int):
+def lin_fun_gen(n_dots: int, x_scale: tuple, k: int, y0: int, std: int):
     rng = np.random.RandomState(1)
-    x = x_scale * rng.rand(n_dots)
-    y = k * x + y0 + rng.randn(n_dots)
+    x = x_scale[0] +(x_scale[1]-x_scale[0]) * rng.rand(n_dots)
+    y = k * x + y0 + std*rng.randn(n_dots)
     return x, y
 
 
@@ -32,5 +32,5 @@ def draw(x, y, name):
 
 
 if __name__ == '__main__':
-    x, y = lin_fun_gen(50, 10, 2, 5)
+    x, y = lin_fun_gen(n_dots=50, x_scale=(-10, 10), k=2, y0=5, std=3)
     draw(x, y, 'first')
