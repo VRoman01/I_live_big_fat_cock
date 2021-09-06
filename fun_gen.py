@@ -21,16 +21,16 @@ def approx(x, y):
     return k, b
 
 
-def draw(x, y):
+def draw(x, y, name):
     fig = plt.figure()
     axe = fig.add_subplot()
     axe.scatter(x,y)
     k, b = approx(x, y)
     y_approx = k*x + b
     axe.plot(x, y_approx)
-    plt.show()
+    plt.savefig('image/{}.png'.format(name))
 
 
 if __name__ == '__main__':
     x, y = lin_fun_gen(50, 10, 2, 5)
-    draw(x, y)
+    draw(x, y, 'first')
