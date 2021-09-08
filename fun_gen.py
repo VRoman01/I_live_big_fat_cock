@@ -45,6 +45,9 @@ def power_draw(X, Y, name, inf):
     fig = plt.figure()
     axe = fig.add_subplot()
     axe.scatter(X.T[1], Y, c='g', label=str(inf))
+    k, b = approx(X.T[1], Y)
+    y_approx = k * X.T[1] + b
+    axe.plot(X.T[1], y_approx, c='r', label='k={:2.1f} b={:2.1f}'.format(k, b))
     axe.legend()
     # plt.savefig('image/{}'.format(name))
     plt.show()
