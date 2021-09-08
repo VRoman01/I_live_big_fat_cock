@@ -29,7 +29,8 @@ def draw(x, y, name, inf):
     y_approx = k*x + b
     axe.plot(x, y_approx, c='r', label='k={:2.1f} b={:2.1f}'.format(k, b))
     axe.legend()
-    plt.savefig('image/{}'.format(name))
+    # plt.savefig('image/{}'.format(name))
+    plt.show()
 
 
 def power_lin_fun_gen(n_dots: int, x_scale: tuple, w, std: int):
@@ -45,7 +46,8 @@ def power_draw(X, Y, name, inf):
     axe = fig.add_subplot()
     axe.scatter(X.T[1], Y, c='g', label=str(inf))
     axe.legend()
-    plt.savefig('image/{}'.format(name))
+    # plt.savefig('image/{}'.format(name))
+    plt.show()
 
 
 if __name__ == '__main__':
