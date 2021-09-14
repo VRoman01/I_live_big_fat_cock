@@ -57,25 +57,19 @@ def analytical_solution(X, Y):
 
 def gradient_descent(X, Y):
     np.random.seed(42)
-    w = np.array([np.random.randn(1), np.random.randn(1)])
+    w = np.random.rand(2)
 
-    # Sets learning rate
-    lr = 1e-1
-    # Defines number of epochs
+    lr = 1e-3
     n_epochs = 1000
 
     for epoch in range(n_epochs):
-        # Computes our model's predicted output
-        yhat = X.dot(w)
+        yhat = X@w
 
-        # How wrong is our model? That's the error!
         error = (Y - yhat)
 
-        # Computes gradients for both "a" and "b" parameters
         w0_grad = -2 * error.mean()
         w1_grad = -2 * (X.T[1] * error).mean()
 
-        # Updates parameters using gradients and the learning rate
         w[0] = w[0] - lr * w0_grad
         w[1] = w[1] - lr * w1_grad
 
@@ -102,13 +96,10 @@ if __name__ == '__main__':
     inf = {'n_dots': 50,
            'x_scale': (-10, 10),
            'w': [5, 3],
-           'std': 3,
+           'std': 0.5,
            }
     X_train, Y_train, X_test, Y_test = power_lin_fun_gen(**inf)
-    print(X_train.T[1])
-    w_predict = gradient_descent(X_train, Y_train)
+
+    w_predict = gradient_descent(X_train,Y_train)
     print(w_predict)
-    # r2 = R2(Y_test, X_test.dot(w_predict))
-    # inf['r2'] = round(r2, 3)
-    # inf['w_predict'] = list(w_predict)
-    # power_draw(X_train, Y_train, w_predict, name='second', inf=inf)
+
