@@ -55,6 +55,33 @@ def analytical_solution(X, Y):
         print(e)
 
 
+def gradient_descent(X, Y):
+    np.random.seed(42)
+    w = np.array([np.random.randn(1), np.random.randn(1)])
+
+    # Sets learning rate
+    lr = 1e-1
+    # Defines number of epochs
+    n_epochs = 1000
+
+    for epoch in range(n_epochs):
+        # Computes our model's predicted output
+        yhat = X.dot(w)
+
+        # How wrong is our model? That's the error!
+        error = (Y - yhat)
+
+        # Computes gradients for both "a" and "b" parameters
+        w0_grad = -2 * error.mean()
+        w1_grad = -2 * (X.T[1] * error).mean()
+
+        # Updates parameters using gradients and the learning rate
+        w[0] = w[0] - lr * w0_grad
+        w[1] = w[1] - lr * w1_grad
+
+    return w
+
+
 def power_draw(X, Y, w, name, inf):
     fig = plt.figure()
     axe = fig.add_subplot()
@@ -64,11 +91,6 @@ def power_draw(X, Y, w, name, inf):
     axe.legend()
     # plt.savefig('image/{}'.format(name))
     plt.show()
-
-
-# def R2(Y, Y_predict):
-#     slope, intercept, r_value, p_value, std_err = stats.linregress(Y, Y_predict)
-#     return r_value
 
 
 def R2(Y, Y_predict):
@@ -83,12 +105,10 @@ if __name__ == '__main__':
            'std': 3,
            }
     X_train, Y_train, X_test, Y_test = power_lin_fun_gen(**inf)
-    w_predict = analytical_solution(X_train, Y_train)
-    r2 = R2(Y_test, X_test.dot(w_predict))
-    inf['r2'] = r2
-    power_draw(X_train, Y_train, w_predict, name='second', inf=inf)
-
-
-    # inf = {'n_dots': 50, 'x_scale': (-10, 10), 'k': 2, 'b': 5, 'std': 3}
-    # x, y = lin_fun_gen(**inf)
-    # draw(x, y, 'first', inf)
+    print(X_train.T[1])
+    w_predict = gradient_descent(X_train, Y_train)
+    print(w_predict)
+    # r2 = R2(Y_test, X_test.dot(w_predict))
+    # inf['r2'] = round(r2, 3)
+    # inf['w_predict'] = list(w_predict)
+    # power_draw(X_train, Y_train, w_predict, name='second', inf=inf)
