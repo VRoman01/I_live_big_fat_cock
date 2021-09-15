@@ -1,7 +1,7 @@
 #!../venv/bin/python3
 import numpy as np
 from matplotlib import pyplot as plt
-from scipy.stats import stats
+from sklearn.utils import shuffle
 
 
 def approx(x, y):
@@ -44,6 +44,8 @@ def power_lin_fun_gen(n_dots: int, x_scale: tuple, w, std: int):
     x = np.arange(x_scale[0], x_scale[1], (x_scale[1]-x_scale[0])/n_dots)
     X_test = np.array([np.ones(n_dots), x]).T
     Y_test = np.matmul(X_test, np.array(w))
+
+    X_train, Y_train = shuffle(X_train, Y_train, random_state=0)
     return X_train, Y_train, X_test, Y_test
 
 
@@ -56,24 +58,31 @@ def analytical_solution(X, Y):
 
 
 def gradient_descent(X, Y):
-    np.random.seed(42)
-    w = np.random.rand(2)
+    w_list = []
+    X_list = np.array_split(X, 10)
+    Y_list = np.array_split(Y, 10)
 
-    lr = 1e-3
-    n_epochs = 1000
+    rng = np.random.RandomState(1)
+    for X, Y in zip(X_list, Y_list):
+        w = rng.rand(2)
 
-    for epoch in range(n_epochs):
-        yhat = X@w
+        lr = 1e-3
+        n_epochs = 1000
 
-        error = (Y - yhat)
+        for epoch in range(n_epochs):
+            yhat = X@w
 
-        w0_grad = -2 * error.mean()
-        w1_grad = -2 * (X.T[1] * error).mean()
+            error = (Y - yhat)
 
-        w[0] = w[0] - lr * w0_grad
-        w[1] = w[1] - lr * w1_grad
+            w0_grad = -2 * error.mean()
+            w1_grad = -2 * (X.T[1] * error).mean()
 
-    return w
+            w[0] = w[0] - lr * w0_grad
+            w[1] = w[1] - lr * w1_grad
+
+        w_list.append(w)
+
+    return w_list
 
 
 def power_draw(X, Y, w, name, inf):
@@ -93,13 +102,18 @@ def R2(Y, Y_predict):
 
 
 if __name__ == '__main__':
-    inf = {'n_dots': 50,
+    inf = {'n_dots': 1000,
            'x_scale': (-10, 10),
            'w': [5, 3],
            'std': 0.5,
            }
     X_train, Y_train, X_test, Y_test = power_lin_fun_gen(**inf)
 
-    w_predict = gradient_descent(X_train,Y_train)
-    print(w_predict)
+    w_gradient_list = gradient_descent(X_train,Y_train)
+    for w_g in w_gradient_list:
+        print(R2(Y_test, X_test@w_g))
+
+    w_analytical = analytical_solution(X_train,Y_train)
+    print('R2_a = ',R2(Y_test, X_test@w_analytical))
+
 

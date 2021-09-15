@@ -1,6 +1,7 @@
 #!../venv/bin/python
 import numpy as np
 from matplotlib import pyplot as plt
+from fun_gen import gradient_descent
 
 
 def power2_lin_fun_gen(x_scale, n_sectors, n_sectors_dots, w, std_y, std_x):
@@ -21,9 +22,9 @@ def analytical_solution(X, Y):
 
 
 if __name__ == '__main__':
-    inf = {'n_sectors': 50,
+    inf = {'n_sectors': 100,
            'n_sectors_dots': 10,
-           'x_scale': ((-10, 10),(-5, 5)),
+           'x_scale': ((-10, 10), (-5, 5)),
            'std_y': 0.3,
            'std_x': 0.3,
            'w': [5, 3, 2],
