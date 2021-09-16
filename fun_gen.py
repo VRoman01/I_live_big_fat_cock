@@ -68,6 +68,8 @@ def gradient_descent(X, Y):
 
         lr = 1e-3
         n_epochs = 1000
+        v0_p = 0
+        v1_p = 0
 
         for epoch in range(n_epochs):
             yhat = X@w
@@ -76,9 +78,14 @@ def gradient_descent(X, Y):
 
             w0_grad = -2 * error.mean()
             w1_grad = -2 * (X.T[1] * error).mean()
+            v0 = 0.9*v0_p + lr*w0_grad
+            v1 = 0.9*v1_p + lr*w1_grad
 
-            w[0] = w[0] - lr * w0_grad
-            w[1] = w[1] - lr * w1_grad
+            w[0] = w[0] - v0
+            w[1] = w[1] - v1
+
+            v0_p = v0
+            v1_p = v1
 
         w_list.append(w)
 
