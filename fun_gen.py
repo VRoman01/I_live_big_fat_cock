@@ -28,15 +28,16 @@ def gradient_descent(X, Y):
     n_epochs = 10
     lr = 1e-2
     w_list = []
+    rng = np.random.RandomState(1)
+    w = rng.rand(2)
+    w_list.append(w)
 
     for epoch in range(n_epochs):
         X, Y = shuffle(X, Y, random_state=0)
 
         X_list = np.array_split(X, 10)
         Y_list = np.array_split(Y, 10)
-
-        rng = np.random.RandomState(1)
-        w = rng.rand(2)
+        w = w_list[-1]
 
         v0_p, v1_p = 0, 0
 
